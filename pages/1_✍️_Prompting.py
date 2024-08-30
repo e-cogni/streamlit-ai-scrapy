@@ -15,6 +15,7 @@ with st.form("text_to_image"):
         ),
     )
     prompt = st.text_area("Prompt")
+    negative_prompt = st.text_area("Negative Prompt")
     submitted = st.form_submit_button("Generate")
     if submitted:
         account_id = st.secrets["CLOUDFLARE_ACCOUNT_ID"]
@@ -27,7 +28,12 @@ with st.form("text_to_image"):
             response = requests.post(
                 url,
                 headers=headers,
-                json={"prompt": prompt},
+                json={
+                    "prompt": prompt,
+                    "negative_prompt": negative_prompt,
+                    "height": 1024,
+                    "width": 1024,
+                    },
             )
             st.image(response.content, caption=prompt)
             f"_Generated with [Cloudflare Workers AI](https://developer.cloudflare.com/workers-ai/) using the `{model}_`"
