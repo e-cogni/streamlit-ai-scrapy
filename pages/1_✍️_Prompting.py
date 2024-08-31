@@ -36,6 +36,9 @@ with st.form("text_to_image"):
                     },
             )
             st.image(response.content, caption=prompt)
+            # add a button 
+            image_bytes = response.content
+            st.download_button("Download Image", data=image_bytes, file_name="generated_image.png", mime="image/png")
             f"_Generated with [Cloudflare Workers AI](https://developer.cloudflare.com/workers-ai/) using the `{model}_`"
         with st.spinner("Creating additional prompt suggestions..."):
             prompt_model = "@hf/thebloke/mistral-7b-instruct-v0.1-awq"
