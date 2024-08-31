@@ -44,7 +44,8 @@ with st.form("text_to_image"):
             "Authorization": f"Bearer {api_token}",
         }
         with st.spinner("Generating..."):
-            url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/{model}"
+            # url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/run/{model}"
+            url = f"https://gateway.ai.cloudflare.com/v1/b70f22c8e75bf434686321ac6f4c7730/ai-cf-test/workers-ai/{model}"
             response = requests.post(
                 url,
                 headers=headers,
