@@ -13,6 +13,15 @@ image_hash = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10
 image_key = 'image_' + image_timestamp + '-' + image_hash
 image_name = lambda: f"{image_key}.png"
 
+# image size options by width and height
+imageSizeOptions = {
+    'square-128': (128, 128),
+    'square-256': (256, 256),
+    'square-512': (512, 512),
+    'square-1024': (1024, 1024),
+    'fb-page-cover (1024x664)': (1024, 664),
+}
+
 @st.fragment()
 def btn_download_image(image_bytes):
     # generate a random filename
@@ -36,6 +45,7 @@ with st.form("text_to_image"):
     )
     prompt = st.text_area("Prompt")
     negative_prompt = st.text_area("Negative Prompt")
+    image_dimensions = st.selectbox("Image Size", options=list(imageSizeOptions.keys()))
     submitted = st.form_submit_button("Generate")
     if submitted:
         account_id = st.secrets["CLOUDFLARE_ACCOUNT_ID"]
@@ -52,8 +62,8 @@ with st.form("text_to_image"):
                 json={
                     "prompt": prompt,
                     "negative_prompt": negative_prompt,
-                    "height": 1024,
-                    "width": 1024,
+                    "height": imageSizeOptions[image_dimensions][1],
+                    "width": imageSizeOptions[image_dimensions][0],
                     },
             )
             st.image(response.content, caption=prompt)
