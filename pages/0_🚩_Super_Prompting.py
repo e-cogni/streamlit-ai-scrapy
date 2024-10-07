@@ -16,7 +16,8 @@ image_name = lambda: f"{image_key}.png"
 # image size options by width and height
 imageSizeOptions = {
     'square-1024': (1024, 1024),
-    'square-2048': (2048, 2048),
+    'square-1200': (1200, 1200),
+    'square-1600': (1600, 16000),
     'fb-page-cover (1024x664)': (1024, 664),
 }
 
