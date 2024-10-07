@@ -62,7 +62,6 @@ with st.form("text_to_image"):
                 headers=headers,
                 json={
                     "prompt": prompt,
-                    # "negative_prompt": negative_prompt,
                     "height": "1024",
                     "width": "1024",
                     "num_steps": "25",
