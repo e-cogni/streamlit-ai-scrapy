@@ -45,7 +45,7 @@ with st.form("text_to_image"):
         ),
     )
     prompt = st.text_area("Prompt")
-    negative_prompt = st.text_area("Negative Prompt")
+    # negative_prompt = st.text_area("Negative Prompt")
     # image_dimensions = st.selectbox("Image Size", options=list(imageSizeOptions.keys()))
     submitted = st.form_submit_button("Generate")
     if submitted:
@@ -62,10 +62,10 @@ with st.form("text_to_image"):
                 headers=headers,
                 json={
                     "prompt": prompt,
-                    "negative_prompt": negative_prompt,
-                    "height": 2048,
-                    "width": 2048,
-                    "num_steps": 35
+                    # "negative_prompt": negative_prompt,
+                    "height": 2000,
+                    "width": 2000,
+                    "num_steps": 25,
                     },
             )
             st.image(response.content, caption=prompt)
