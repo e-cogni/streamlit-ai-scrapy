@@ -44,7 +44,7 @@ with st.form("text_to_image"):
         ),
     )
     prompt = st.text_area("Prompt")
-    negative_prompt = st.text_area("Negative Prompt")
+    negative_prompt = st.text_area("Negative Prompt", "Ugly, distort, low resolution, people, malformed, low poly")
     image_dimensions = st.selectbox("Image Size", options=list(imageSizeOptions.keys()))
     submitted = st.form_submit_button("Generate")
     if submitted:
