@@ -41,6 +41,7 @@ with st.form("text_to_image"):
             "@cf/stabilityai/stable-diffusion-xl-base-1.0",
             "@cf/lykon/dreamshaper-8-lcm",
             "@cf/bytedance/stable-diffusion-xl-lightning",
+            "@cf/black-forest-labs/flux-1-schnell",
         ),
     )
     prompt = st.text_area("Prompt")
