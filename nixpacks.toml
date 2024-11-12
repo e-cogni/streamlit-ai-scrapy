@@ -1,4 +1,4 @@
-[phases.setup]
+[setup]
 nixLibs = ['...','zlib', 'libnss3', 'chromium-browser']
 
 [start]
