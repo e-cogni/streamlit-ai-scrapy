@@ -1,5 +1,5 @@
 [phases.setup]
-    aptPkgs = ['libnss3', 'chromium-browser']
+    aptPkgs = ['gconf-service', 'libasound2', 'libatk', 'libcairo2', 'libcups2', 'libfontconfig1', 'libgdk-pixbuf', 'libgtk', 'libnspr4', 'libpango', 'libxss1', 'fonts-liberation', 'libappindicator1', 'libnss3', 'lsb-release', 'xdg-utils', 'chromium-browser']
 
 [start]
     cmd = 'python -m streamlit run app.py'
