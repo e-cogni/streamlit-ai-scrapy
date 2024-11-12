@@ -41,7 +41,6 @@ known_domains = {
 # Função para obter o driver do navegador
 def get_driver(url):
     driver = webdriver.Chrome(options=slOptions)
-    driver.implicitly_wait(0.5)
     driver.get(url)
     return driver
 
@@ -115,16 +114,21 @@ if content:
     st.header("Result")
     st.subheader("Content")
     content_area_editor(content)
-    st.subheader("Metadata Image")
-    st.image(metadata["og_image"])
-    st.subheader("Screenshot")
-    st.image(screen_shot)
-    st.subheader("OG Data")
-    st.json(structured_data["opengraph"])
-    st.subheader("Metadata")
-    st.json(metadata)
-    st.subheader("Structured Data")
-    st.json(structured_data)
+    if metadata:
+        st.subheader("Metadata Image")
+        st.image(metadata["og_image"])
+    if screen_shot:
+        st.subheader("Screenshot")
+        st.image(screen_shot)
+    if structured_data:
+        st.subheader("OG Data")
+        st.json(structured_data["opengraph"])
+    if metadata:
+        st.subheader("Metadata")
+        st.json(metadata)
+    if structured_data:
+        st.subheader("Structured Data")
+        st.json(structured_data)
     print(content)
 
 
