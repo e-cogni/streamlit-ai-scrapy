@@ -1,5 +1,5 @@
 [phases.setup]
-    aptPkgs = ['zlib', 'libnss3', 'chromium-browser']
+    aptPkgs = ['libnss3', 'chromium-browser']
 
 [start]
     cmd = 'python -m streamlit run app.py'
