@@ -19,7 +19,7 @@ slOptions.add_argument("--headless")  # modo headless
 slOptions.add_argument("--window-size=1920,1200")  # resolucao da janela
 slOptions.add_argument("--start-maximized")  
 slOptions.page_load_strategy = 'eager'
-slOptions.timeouts = { 'script': 5000, 'implicit': 5000 }
+# slOptions.timeouts = { 'script': 5000, 'implicit': 1000 }
 # slOptions.enable_bidi = True
 
 
