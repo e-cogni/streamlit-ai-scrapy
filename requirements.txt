@@ -2,3 +2,7 @@ requests
 streamlit
 streamlit_drawable_canvas
 watchdog
+extruct
+beautifulsoup4
+w3lib
+selenium
