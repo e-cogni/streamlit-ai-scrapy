@@ -1,0 +1,5 @@
+[phases.setup]
+nixLibs = ['...','zlib', 'libnss3', 'chromium-browser']
+
+[start]
+cmd = 'python -m streamlit run app.py'
