@@ -1,8 +1,8 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="Cloudflare Workers AI Image Demos",
-    page_icon="👋",
+    page_title="E-cogni Streamlit IA Scraping",
+    page_icon="🧊",
 )
 
 """
@@ -23,13 +23,7 @@ In **Masking**, you'll be able to use a canvas to replace portions of an image w
 
 In **Seeing**, you can upload a photo and ask questions about it.
 
-Please share what you build with us [@CloudflareDev](https://twitter.com/cloudflaredev) and come hang out in our [Discord](https://discord.cloudflare.com)!
 
-"""
-
-st.video("https://youtu.be/8SnrvAYAJ4Q")
-
-"""
 ---
 
 Built with 🧡 [Craig (@craigsdennis)](https://twitter.com/craigsdennis)

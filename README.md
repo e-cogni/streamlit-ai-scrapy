@@ -1,14 +1,36 @@
-# Image Model Cloudflare Workers AI Streamlit starters
+# Streamlit App AI Scrapy com Firecrawl
 
-This is a collection of [Streamlit](https://streamlit.io) applications that are making use of [Cloudflare Workers AI](https://developers.cloudflare.com/workers-ai/)
+Este é uma colecao de aplicacoes [Streamlit](https://streamlit.io) que fazem uso de tecnologias de Scrapy como Firecrawl, Selenium, BeatfulSop e ferramentas de IA para extracao, sumarizacao e manipulacao de dados.
 
-[![YouTube - Image Generation, Inpainting, and Vision Models](http://img.youtube.com/vi/8SnrvAYAJ4Q/0.jpg)](http://www.youtube.com/watch?v=8SnrvAYAJ4Q "Image Generation, Inpainting, and Vision Models")
+## Tecnologias
 
-This, like all of us, is a Work in Progress.
+Algumas das principais ferramentas e tecnologias utilizadas foram:
 
-## Installation
+**Framework**
 
-Copy [.streamlit/secrets.toml.example](./.streamlit/secrets.toml.example) to `.streamlit/secrets.toml`.
+* [Streamlit](https://streamlit.io)
+
+**Bibliotecas**
+
+* Extruct
+* beautifulsoup
+* w3lib
+* selenium
+* nodriver
+* requests
+* ~~pandas~~
+* firecrawl-py
+
+**IA**
+
+* [Cloudflare Workers AI](https://developers.cloudflare.com/workers-ai/)
+
+
+## Instalacao
+
+Copie [.streamlit/secrets.toml.example](./.streamlit/secrets.toml.example) para `.streamlit/secrets.toml`. Este arquivo conterá todos os segredos e chaves de API necessários para executar o aplicativo.
+
+Instale as dependências do Python:
 
 ```bash
 python -m venv venv
@@ -16,10 +38,10 @@ source ./venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
-## Run
+## Executando
 
-Streamlit applications can be started like so:
+Para executar o aplicativo, use o seguinte comando:
 
 ```bash
-python -m streamlit run Hello.py
+python -m streamlit run app.py
 ```
