@@ -5,6 +5,9 @@ import base64
 from bs4 import BeautifulSoup
 import requests
 from lxml import etree
+from io import BytesIO
+from PIL import Image
+import json
 
 # Configurações do Firecrawl
 firecrawl_key = st.secrets["FIRECRAWL_API_KEY"]
@@ -14,7 +17,7 @@ firecrawl = FirecrawlApp(api_key=firecrawl_key)
 token = st.secrets["BROWSERLESS_API_TOKEN"]
 address = st.secrets["BROWSERLESS_ADDRESS"]
 headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+        "User-Agent": "Mozilla/5.0 (compatible; Ecognibot/2.1; +http://www.e-cogni.com/bot.html)",
         "Cache-Control": "no-cache",
         "Content-Type": "application/json"
     }
@@ -28,6 +31,32 @@ known_domains = {
     "www.tecmundo.com.br": 'div.tec--article__body.z--px-16',
     'olhardigital.com.br':  'div.post-content.wp-embed-responsive',
     'techcrunch.com': 'div.entry-content.wp-block-post-content.is-layout-constrained.wp-block-post-content-is-layout-constrained',
+    'noticias.uol.com.br': 'body > div.vl-wrapper > main > article > div:nth-child(1) > div.mt-100.container.grid > div > div',
+    # auto gerado
+    'www.theverge.com': 'div.c-entry-content',
+    'www.wired.com': 'div.body__inner-container',
+    'www.nytimes.com': 'div.StoryBodyCompanionColumn',
+    'www.washingtonpost.com': 'div.article-body',
+    'www.wsj.com': 'div.article-content',
+    'www.bloomberg.com': 'div.body-copy-v2',
+    'www.economist.com': 'div.layout-article__content',
+    'www.ft.com': 'div#site-content',
+    'www.businessinsider.com': 'div.article-content-container',
+    'www.forbes.com': 'div.article-body-container',
+    'www.inc.com': 'div.article-body',
+    'www.entrepreneur.com': 'div.article-body',
+    'www.fastcompany.com': 'div.article-body',
+    'www.hbr.org': 'div.article.article-first-column',
+    'www.nature.com': 'div.c-article-body',
+    'www.sciencemag.org': 'div.article__body',
+    'www.scientificamerican.com': 'div.article__body',
+    'www.nationalgeographic.com': 'div.Article__Content',
+    'www.newscientist.com': 'div.article__body',
+    'www.sciencedaily.com': 'div#text',
+    'www.livescience.com': 'div.article-content',
+    'www.space.com': 'div.article-content',
+    'www.nasa.gov': 'div.wysiwyg_content',
+    'www.nationalgeographic.com': 'div.Article__Content',
     # Adicione mais domínios e seletores conforme necessário
 }
 
@@ -71,7 +100,7 @@ def firecrawl_scrape(url):
 def browserless_scrape(url):
 
     request_url = f"{address}/content?token={token}"
-    data = {"url": url}
+    data = {"url": url, 'setJavaScriptEnabled': False, 'gotoOptions': {'referer': 'https://www.google.com/'}}
     try:
         response = requests.post(request_url, headers=headers, json=data)
         content = response.text
@@ -108,6 +137,27 @@ def extract_og_data(content_raw, url):
     data = extruct.extract(content_raw, base_url=url, syntaxes=['opengraph'], uniform=True)
     return data
 
+# Função para baixar e converter a imagem og:image para base64
+def download_and_convert_image(og_data):
+    # data = json.loads(og_data)
+    og_image_url = og_data['opengraph'][0]['og:image']
+    if og_image_url:
+        try:
+            response = requests.get(og_image_url)
+            response.raise_for_status()
+            image = Image.open(BytesIO(response.content))
+            buffered = BytesIO()
+            image.save(buffered, format="JPEG")
+            img_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+            return img_base64
+        except Exception as e:
+            st.error(f"Erro ao baixar ou converter a imagem: {e}")
+            return None
+    else:
+        st.info(og_image_url)
+        st.warning("Imagem og:image não encontrada.")
+        return None
+
 # Função principal do Streamlit
 def main():
     st.title("Scrape com Browserless")
@@ -142,10 +192,13 @@ def main():
                     st.subheader("Open Graph Data")
                     st.json(og_data)
                     st.subheader("OG Image")
-                    if 'opengraph' in og_data and len(og_data['opengraph']) > 0 and 'og:image' in og_data['opengraph'][0]:
-                        st.image(og_data['opengraph'][0]['og:image'], caption="OG Image", use_container_width=True)
-                    else:
-                        st.error("No OG Image found.")
+                    img_base64 = download_and_convert_image(og_data)
+                    if img_base64:
+                        st.image(f"data:image/jpeg;base64,{img_base64}", caption="Imagem og:image")
+                    # if 'opengraph' in og_data and len(og_data['opengraph']) > 0 and 'og:image' in og_data['opengraph'][0]:
+                        # st.image(og_data['opengraph'][0]['og:image'], caption="OG Image", use_container_width=True)
+                    # else:
+                        # st.error("No OG Image found.")
                     st.subheader("JSON-LD Data")
                     jld_data = extract_jld_data(content_raw, url)
                     st.json(jld_data)
