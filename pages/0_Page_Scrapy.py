@@ -26,6 +26,8 @@ known_domains = {
     "www.cnnbrasil.com.br": "div.single-content",
     "fdr.com.br": "article.singular__content",
     "www.tecmundo.com.br": 'div.tec--article__body.z--px-16',
+    'olhardigital.com.br':  'div.post-content.wp-embed-responsive',
+    'techcrunch.com': 'div.entry-content.wp-block-post-content.is-layout-constrained.wp-block-post-content-is-layout-constrained',
     # Adicione mais domínios e seletores conforme necessário
 }
 
