@@ -4,7 +4,7 @@ import extruct
 import base64
 from bs4 import BeautifulSoup
 import requests
-from extruct.opengraph import OpenGraphExtractor
+from lxml import etree
 
 # Configurações do Firecrawl
 firecrawl_key = st.secrets["FIRECRAWL_API_KEY"]
@@ -24,7 +24,8 @@ known_domains = {
     "www.bbc.com": "main",
     "cnn.com": "div.l-container",
     "www.cnnbrasil.com.br": "div.single-content",
-    "fdr.com.br": "article.singular__content"
+    "fdr.com.br": "article.singular__content",
+    "www.tecmundo.com.br": 'div.tec--article__body.z--px-16',
     # Adicione mais domínios e seletores conforme necessário
 }
 
@@ -37,8 +38,11 @@ def extract_content(url, content_raw):
 
     # Extrair conteúdo principal
     main_content = soup.select_one(selector)
+    # body = soup.find("body")
+    # dom = etree.HTML(str(body))
+    # main_content = dom.xpath(selector)[0].text
     if main_content:
-        return main_content.get_text(strip=True)
+        return main_content.text
     else:
         return "Conteúdo principal não encontrado."
 
