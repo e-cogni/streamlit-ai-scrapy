@@ -158,52 +158,64 @@ def download_and_convert_image(og_data):
         st.warning("Imagem og:image não encontrada.")
         return None
 
+# Função para extrair o texto dos elementos title, h1 e og:title
+def extract_page_titles(content_raw, og_data):
+    soup = BeautifulSoup(content_raw, "html.parser")
+    
+    # Extrair o título da página
+    page_title = soup.title.string if soup.title else "Título não encontrado"
+    
+    # Extrair o primeiro h1 da página
+    h1 = soup.h1.string if soup.h1 else "H1 não encontrado"
+    
+    # Extrair o og:title dos dados Open Graph
+    og_title = og_data['opengraph'][0]['og:title'] if 'opengraph' in og_data and og_data['opengraph'] and 'og:title' in og_data['opengraph'][0] else "OG:title não encontrado"
+    
+    return page_title, h1, og_title
+
 # Função principal do Streamlit
 def main():
-    st.title("Scrape com Browserless")
+    st.title("News Scrape com Browserless")
 
     with st.form("indexer"):
-        url = st.text_input("Enter the URL of the news article:", key="url")
-        submitted = st.form_submit_button("Analisar link")
+        url = st.text_input("entre com a URL da noticia:", key="url")
+        submitted = st.form_submit_button("Garimpar Dados")
 
         if submitted:
             if not url:
-                st.error("Please enter a URL.")
+                st.error("Informe a URL.")
             else:
-                with st.spinner("Loading..."):
+                with st.spinner("garimpando..."):
                     content_raw = browserless_scrape(url)
                     str_data = extract_structured_data(content_raw, url)
                     og_data = extract_og_data(content_raw, url)
-                    st.header("Result")
-                    # st.subheader("Content")
-                    # st.text_area("Content", content, key="content")
-                    st.subheader("Raw Content")
-                    st.text_area("Raw Content", content_raw, key="content_raw")
-                    st.subheader("Main Content")
+                    jld_data = extract_jld_data(content_raw, url)
                     content = extract_content(url, content_raw)
-                    st.text_area("Main Content",content, key="main_content")
-                    st.subheader("Screenshot")
                     screenshot = take_screenshot(url)
+                    img_base64 = download_and_convert_image(og_data)
+                    # Extrair títulos da página
+                    page_title, h1, og_title = extract_page_titles(content_raw, og_data)
+
+                    st.header("Resultado")
+                    st.subheader("HTML")
+                    st.text_area("HTML", content_raw, key="content_raw")
+                    # Mostrar títulos extraídos
+                    st.subheader("Títulos da Página")
+                    st.text(f"Título da Página: {page_title}")
+                    st.text(f"H1: {h1}")
+                    st.text(f"OG:title: {og_title}")
+                    st.subheader("Conteudo Principal")
+                    st.text_area("Conteudo Principal",content, key="main_content")
+                    st.subheader("Captura de tela")
                     if screenshot:
                         base64_image = base64.b64decode(screenshot)
                         st.image(base64_image, caption="Screenshot of the page", use_container_width=True)
                     else:
                         st.error("Failed to take screenshot.")
-                    st.subheader("Open Graph Data")
-                    st.json(og_data)
-                    st.subheader("OG Image")
-                    img_base64 = download_and_convert_image(og_data)
+                    st.subheader("Imagem OG")
                     if img_base64:
                         st.image(f"data:image/jpeg;base64,{img_base64}", caption="Imagem og:image")
-                    # if 'opengraph' in og_data and len(og_data['opengraph']) > 0 and 'og:image' in og_data['opengraph'][0]:
-                        # st.image(og_data['opengraph'][0]['og:image'], caption="OG Image", use_container_width=True)
-                    # else:
-                        # st.error("No OG Image found.")
-                    st.subheader("JSON-LD Data")
-                    jld_data = extract_jld_data(content_raw, url)
-                    st.json(jld_data)
-                    st.subheader("Structured Data")
-                    st.json(str_data)
+
 
 if __name__ == "__main__":
     main()
